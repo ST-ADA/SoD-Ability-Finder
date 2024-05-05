@@ -3,7 +3,6 @@ package com.stada.sodabilityfinder.screens;
 import com.stada.sodabilityfinder.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -82,9 +81,9 @@ public class HomeScreen {
         centerVBox.setSpacing(30);
 
         // Create and configure alliance and horde hyperlinks
-        Hyperlink allianceHyperlink = createFactionHyperlink("alliance");
+        Hyperlink allianceHyperlink = createFactionHyperlink("alliance", stage);
         allianceHyperlink.setId("allianceHyperlink");
-        Hyperlink hordeHyperlink = createFactionHyperlink("horde");
+        Hyperlink hordeHyperlink = createFactionHyperlink("horde", stage);
         hordeHyperlink.setId("hordeHyperlink");
 
         // Add elements to center HBox and VBox
@@ -129,7 +128,7 @@ public class HomeScreen {
      * @param faction The name of the faction for which the hyperlink is created.
      * @return The created hyperlink with the faction image.
      */
-    private Hyperlink createFactionHyperlink(String faction) {
+    private Hyperlink createFactionHyperlink(String faction, Stage stage) {
         // Create an image using the faction name to locate the image file
         Image factionImage = new Image(
                 Application.class.getResource(
@@ -147,7 +146,14 @@ public class HomeScreen {
 
         // Set an action for the hyperlink
         factionHyperlink.setOnAction(e -> {
-            // Add your action here
+            // go to ClassScreen, passing the faction as a parameter as a string
+            ClassScreen classScreen = new ClassScreen();
+            try {
+                classScreen.start(stage, faction);
+                stage.setScene(classScreen.getScene());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
 
         // Return the created hyperlink
