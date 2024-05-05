@@ -41,7 +41,7 @@ public class LoginScreen {
 
         // Create and configure logo
         ImageView logo = new ImageView(
-                new Image(Application.class.getResource("images/Logo.png")
+                new Image(Application.class.getResource("images/logo.png")
                         .toString()));
         logo.setFitHeight(200);
         logo.setFitWidth(400);
@@ -108,7 +108,7 @@ public class LoginScreen {
         Scene scene = new Scene(content, 800, 600);
         scene.getStylesheets().add(
                 Application.class.getResource(
-                        "/com/stada/sodabilityfinder/stylesheets/global_text_styles.css")
+                                "/com/stada/sodabilityfinder/stylesheets/global_style.css")
                         .toExternalForm());
         scene.getStylesheets().add(
                 Application.class.getResource(

@@ -1,13 +1,5 @@
 /* HomeScreen Style */
 
-/* Style for the top label */
-#topLabel {
-    -fx-font-size: 24; /* Set the font size to 24 */
-    -fx-font-weight: bold; /* Set the font weight to bold */
-    -fx-text-fill: #d4af37; /* Set the text color to a gold color */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0.75, 2, 2); /* Add a drop shadow effect */
-}
-
 /* Style for the faction label */
 #factionLabel {
     -fx-font-size: 32; /* Set the font size to 32 */
@@ -20,10 +12,4 @@
 #allianceHyperlink, #hordeHyperlink {
     -fx-background-radius: 60; /* Set the background radius to 60 to create a rounded button */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 1, 0, 0); /* Add a drop shadow effect */
-}
-
-/* Style for the hyperlink */
-.hyperlink {
-    -fx-border-color: transparent; /* Make the border color transparent */
-    -fx-border-width: 0; /* Remove the border width */
 }

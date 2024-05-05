@@ -1,0 +1,48 @@
+/* Global text styles */
+
+/* Define a new font-face 'Morpheus' and specify the source file for the font */
+@font-face {
+    font-family: 'Morpheus';
+    src: url("../fonts/Morpheus.ttf");
+}
+
+/* Apply the 'Morpheus' font to all elements in the application */
+* {
+    -fx-font-family: "Morpheus", serif;
+}
+
+
+/* Style for the top label */
+#topLabel {
+    -fx-font-size: 24; /* Set the font size to 24 */
+    -fx-font-weight: bold; /* Set the font weight to bold */
+    -fx-text-fill: #d4af37; /* Set the text color to a gold color */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0.75, 2, 2); /* Add a drop shadow effect */
+}
+
+/* Style for the hyperlink */
+.hyperlink {
+    -fx-border-color: transparent; /* Make the border color transparent */
+    -fx-border-width: 0; /* Remove the border width */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 1, 0, 0); /* Add a drop shadow effect */
+}
+
+#backButton {
+    -fx-text-fill: #d4af37;
+    -fx-font-size: 14;
+    -fx-background-image: url('../images/button_idle.png');
+    -fx-pref-width: 236px;
+    -fx-pref-height: 35px;
+    -fx-border: none;
+    -fx-effect: dropshadow(gaussian, #000, 8, 0.5, 2, 2);
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+}
+
+#backButton:hover {
+    -fx-background-image: url('../images/button_hover.png');
+}
+
+#backButton:pressed {
+    -fx-background-image: url('../images/button_active.png');
+}

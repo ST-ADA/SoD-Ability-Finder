@@ -42,7 +42,7 @@ public class RegisterScreen {
         // Create and configure logo
         ImageView logo = new ImageView(
                 new Image(Application.class.getResource(
-                        "images/Logo.png")
+                        "images/logo.png")
                         .toString()));
         logo.setFitHeight(200);
         logo.setFitWidth(400);
@@ -104,7 +104,7 @@ public class RegisterScreen {
         Scene scene = new Scene(content, 800, 600);
         scene.getStylesheets().add(
                 Application.class.getResource(
-                        "/com/stada/sodabilityfinder/stylesheets/global_text_styles.css")
+                                "/com/stada/sodabilityfinder/stylesheets/global_style.css")
                         .toExternalForm());
         scene.getStylesheets().add(
                 Application.class.getResource(

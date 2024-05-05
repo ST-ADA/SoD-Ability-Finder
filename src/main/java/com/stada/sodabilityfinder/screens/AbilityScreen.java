@@ -3,9 +3,7 @@ package com.stada.sodabilityfinder.screens;
 import com.stada.sodabilityfinder.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -16,19 +14,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ClassScreen {
+public class AbilityScreen {
 
     // The main content pane for this screen
     private BorderPane content = new BorderPane();
 
-    /**
-     * Starts the ClassScreen.
-     *
-     * @param stage The stage on which the ClassScreen is displayed.
-     * @param faction The faction selected by the user.
-     * @throws IOException If the FXML file for the ClassScreen cannot be found.
-     */
-    public void start(Stage stage, String faction) throws IOException {
+    public void start(Stage stage,String faction, String className) throws IOException {
+
+        content.setId("content");
+
         // Create the top HBox
         HBox top = new HBox();
 
@@ -69,19 +63,46 @@ public class ClassScreen {
         Region region2 = new Region();
         HBox.setHgrow(region2, Priority.ALWAYS);
 
-        // Create and configure the center VBox
-        VBox centerVBox = new VBox();
-        centerVBox.setAlignment(Pos.CENTER);
-
         // Add elements to the top HBox
         top.getChildren().addAll(logo, region1, topLabel, region2, adminLink);
 
-        // Create and configure the class label
-        Label classLabel = new Label("Choose your Class:");
-        classLabel.setId("classLabel");
+        // Create the ScrollPane
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setStyle("-fx-background:transparent;-fx-background-color:transparent;");
+        scrollPane.setPrefSize(600, 400);
 
-        // Create the class grid
-        GridPane classGrid = createClassGrid(stage, faction);
+
+        // Create some test data
+        String abilityName = "Test Ability";
+        String abilityDescription = "This is a test ability.";
+        Image abilityImage = new Image(Application.class.getResource("images/alliance.png").toString());
+        String location = "Test Location";
+
+        // Create the GridPane with 1 column
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(20);
+        gridPane.setVgap(20);
+        gridPane.setAlignment(Pos.CENTER);
+        GridPane.setHgrow(gridPane, Priority.ALWAYS);
+        GridPane.setVgrow(gridPane, Priority.ALWAYS);
+
+        // Add the ability layout to the grid pane
+        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 0);
+        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 1);
+        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 2);
+        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 3);
+        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 4);
+        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 5);
+        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 6);
+
+
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(gridPane);
+        stackPane.setAlignment(Pos.CENTER);
+
+        // Set the GridPane as the content of the ScrollPane
+        scrollPane.setContent(stackPane);
+
 
         // Create the back button
         Button backButton = new Button("Back to Homescreen");
@@ -101,8 +122,6 @@ public class ClassScreen {
         bottomHBox.setAlignment(Pos.BOTTOM_RIGHT);
         bottomHBox.getChildren().add(backButton);
 
-        // Add elements to the center VBox
-        centerVBox.getChildren().addAll(classLabel, classGrid);
 
         // Create and configure the media player
         Media media = new Media(
@@ -116,13 +135,11 @@ public class ClassScreen {
         // Add the media view to the content
         content.getChildren().add(mediaView);
 
-        // Create and configure the stack pane
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(top, centerVBox);
-        stackPane.setAlignment(top, Pos.TOP_CENTER);
+        // Set the top HBox as the top of the content
+        content.setTop(top);
 
         // Set the stack pane as the center of the content
-        content.setCenter(stackPane);
+        content.setCenter(scrollPane);
 
         // Set the bottom HBox as the bottom of the content
         content.setBottom(bottomHBox);
@@ -138,7 +155,7 @@ public class ClassScreen {
                         .toExternalForm());
         scene.getStylesheets().add(
                 Application.class.getResource(
-                                "/com/stada/sodabilityfinder/stylesheets/class_screen_style.css")
+                                "/com/stada/sodabilityfinder/stylesheets/ability_screen_style.css")
                         .toExternalForm());
 
         // Set the scene on the stage and show the stage
@@ -146,62 +163,50 @@ public class ClassScreen {
         stage.show();
     }
 
-    /**
-     * Creates and configures the class grid.
-     *
-     * @param faction The faction selected by the user.
-     * @return The created class grid.
-     */
-    private GridPane createClassGrid(Stage stage, String faction) {
-        // Create a new GridPane and set its properties
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
+    private VBox createAbilityLayout(String abilityName, String abilityDescription, Image abilityImage, String location) {
+        // Create the VBox named abilityVBox
+        VBox abilityVBox = new VBox();
+        abilityVBox.setPrefSize(600, 200);
 
-        // Create a new GridPane and set its properties
-        String[][] classes = {
-                {"druid", "hunter", "mage", "priest"},
-                {"rogue", "warlock", "warrior", faction.equals("alliance") ? "paladin" : "shaman"}
-        };
+        // Create the HBox named topHalfHBox
+        HBox topHalfHBox = new HBox();
+        topHalfHBox.setPrefSize(600, 100);
 
-        // Loop through each class and create a hyperlink for it
-        for (int i = 0; i < classes.length; i++) {
-            for (int j = 0; j < classes[i].length; j++) {
-                String className = classes[i][j];
-                // Check if the class name is not empty
-                if (!className.isEmpty()) {
-                    // Create an image for the class
-                    Image classImage = new Image(
-                            Application.class.getResource(
-                                            "images/classes/" + className + ".png")
-                                    .toString());
-                    // Create an ImageView to display the image
-                    ImageView classImageView = new ImageView(classImage);
-                    classImageView.setFitHeight(100);
-                    classImageView.setFitWidth(100);
-                    // Create a Hyperlink and set the graphic to the ImageView
-                    Hyperlink classHyperlink = new Hyperlink();
-                    classHyperlink.setGraphic(classImageView);
+        // Create the ImageView named abilityImageView
+        ImageView abilityImageView = new ImageView(abilityImage);
+        abilityImageView.setFitWidth(100);
+        abilityImageView.setFitHeight(100);
 
-                    // Set an action for the hyperlink
-                    classHyperlink.setOnAction(e -> {
-                        AbilityScreen abilityScreen = new AbilityScreen();
-                        try {
-                            abilityScreen.start(stage, faction, className);
-                            stage.setScene(abilityScreen.getScene());
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                    });
+        // Create the VBox named abilityNameVBox
+        VBox abilityNameVBox = new VBox();
+        abilityNameVBox.setPrefSize(500, 100);
 
-                    // Add the hyperlink to the grid
-                    grid.add(classHyperlink, j, i);
-                }
-            }
-        }
-        // Return the created grid
-        return grid;
+        // Create the TextArea named abilityNameText
+        TextArea abilityNameText = new TextArea(abilityName);
+        abilityNameText.setMaxSize(500, 30);
+        abilityNameText.setMinSize(500, 30);
+        abilityNameText.setEditable(false);
+
+        // Create the TextArea named abilityDescriptionText
+        TextArea abilityDescriptionText = new TextArea(abilityDescription);
+        abilityDescriptionText.setPrefSize(500, 70);
+        abilityDescriptionText.setEditable(false);
+
+        // Add the TextAreas to the abilityNameVBox
+        abilityNameVBox.getChildren().addAll(abilityNameText, abilityDescriptionText);
+
+        // Add the ImageView and VBox to the topHalfHBox
+        topHalfHBox.getChildren().addAll(abilityImageView, abilityNameVBox);
+
+        // Create the TextArea named locationText
+        TextArea locationText = new TextArea(location);
+        locationText.setPrefSize(600, 100);
+        locationText.setEditable(false);
+
+        // Add the HBox and TextArea to the abilityVBox
+        abilityVBox.getChildren().addAll(topHalfHBox, locationText);
+
+        return abilityVBox;
     }
 
     /**
