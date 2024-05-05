@@ -36,7 +36,7 @@
 #usernameLabel, #passwordLabel {
     -fx-text-fill: #d4af37;
     -fx-font-size: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 1, 2, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0.75, 2, 2);
 }
 
 #register, #login {

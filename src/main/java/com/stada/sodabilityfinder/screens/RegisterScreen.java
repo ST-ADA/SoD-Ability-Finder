@@ -17,84 +17,109 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class RegisterScreen {
-        private BorderPane content = new BorderPane();
+    // The main content pane for this screen
+    private BorderPane content = new BorderPane();
 
-        public void start(Stage stage) throws IOException {
-            VBox vbox = new VBox();
-            vbox.setAlignment(Pos.CENTER);
+    /**
+     * Starts the register screen on the provided stage.
+     *
+     * @param stage The stage on which the register screen is displayed.
+     * @throws IOException If there is an error loading the image or video resources.
+     */
+    public void start(Stage stage) throws IOException {
+        // Create main VBox for layout
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
 
-            VBox spacingBoxUsername = new VBox();
-            spacingBoxUsername.setSpacing(10);
-            spacingBoxUsername.setAlignment(Pos.CENTER);
+        // Create spacing boxes for username and buttons
+        VBox spacingBoxUsername = new VBox();
+        spacingBoxUsername.setSpacing(10);
+        spacingBoxUsername.setAlignment(Pos.CENTER);
+        VBox spacingButton = new VBox();
+        spacingButton.setSpacing(10);
+        spacingButton.setAlignment(Pos.CENTER);
 
-            VBox spacingButton = new VBox();
-            spacingButton.setSpacing(10);
-            spacingButton.setAlignment(Pos.CENTER);
+        // Create and configure logo
+        ImageView logo = new ImageView(
+                new Image(Application.class.getResource(
+                        "images/Logo.png")
+                        .toString()));
+        logo.setFitHeight(200);
+        logo.setFitWidth(400);
 
-            ImageView logo = new ImageView(new Image(Application.class.getResource("images/Logo.png").toString()));
-            logo.setFitHeight(200);
-            logo.setFitWidth(400);
+        // Create and configure username label and text field
+        Label usernameLabel = new Label("Username");
+        usernameLabel.setId("usernameLabel");
+        TextField username = new TextField();
+        username.setId("username");
 
-            Label usernameLabel = new Label("Username");
-            usernameLabel.setId("usernameLabel");
+        // Create and configure password label and field
+        Label passwordLabel = new Label("Password");
+        passwordLabel.setId("passwordLabel");
+        PasswordField password = new PasswordField();
+        password.setId("password");
 
-            TextField username = new TextField();
-            username.setId("username");
+        // Create and configure register button
+        Button register = new Button("Register");
+        register.setId("register");
+        register.setOnAction(e -> {});
 
-            Label passwordLabel = new Label("Password");
-            passwordLabel.setId("passwordLabel");
+        // Create and configure login hyperlink
+        Hyperlink login = new Hyperlink("Back to Log In");
+        login.setUnderline(true);
+        login.setId("hyperlink");
+        login.setOnAction(e -> {
+            LoginScreen loginScreen = new LoginScreen();
+            try {
+                loginScreen.start(stage);
+                stage.setScene(loginScreen.getScene());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
 
-            PasswordField password = new PasswordField();
-            password.setId("password");
+        // Add elements to spacing boxes and main VBox
+        spacingBoxUsername.getChildren().addAll(username, passwordLabel);
+        spacingButton.getChildren().addAll(password, register, login);
+        vbox.getChildren().addAll(logo, usernameLabel, spacingBoxUsername, spacingButton);
 
-            Button register = new Button("Register");
-            register.setId("register");
-            register.setOnAction(e -> {
-            });
+        // Create and configure media player
+        Media media = new Media(
+                Application.class.getResource(
+                        "images/backgrounds/background.mp4")
+                        .toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(0);
+        MediaView mediaView = new MediaView(mediaPlayer);
 
-            Hyperlink login = new Hyperlink("Back to Log In");
-            login.setUnderline(true);
-            login.setId("hyperlink");
-            login.setOnAction(e -> {
-                LoginScreen loginScreen = new LoginScreen();
-                try {
-                    loginScreen.start(stage);
-                    stage.setScene(loginScreen.getScene());
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            });
+        // Create and configure stack pane
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(mediaView, vbox);
 
-            spacingBoxUsername.getChildren().addAll(username, passwordLabel);
-            spacingButton.getChildren().addAll(password,register, login);
-            vbox.getChildren().addAll(logo, usernameLabel, spacingBoxUsername, spacingButton);
+        // Set stack pane as center of content
+        content.setCenter(stackPane);
+        mediaPlayer.play();
 
-            Media media = new Media(Application.class.getResource("images/backgrounds/background.mp4").toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setVolume(0);
-            MediaView mediaView = new MediaView(mediaPlayer);
+        // Create and configure scene
+        Scene scene = new Scene(content, 800, 600);
+        scene.getStylesheets().add(
+                Application.class.getResource(
+                        "/com/stada/sodabilityfinder/stylesheets/global_text_styles.css")
+                        .toExternalForm());
+        scene.getStylesheets().add(
+                Application.class.getResource(
+                        "/com/stada/sodabilityfinder/stylesheets/login_register_style.css")
+                        .toExternalForm());
+        stage.setScene(scene);
+        stage.show();
+    }
 
-            StackPane stackPane = new StackPane();
-            stackPane.getChildren().addAll(mediaView, vbox);
-            StackPane.setAlignment(vbox, Pos.CENTER);
-
-            content.setCenter(stackPane);
-            mediaPlayer.play();
-
-            Scene scene = new Scene(content, 800, 600);
-            scene.getStylesheets().add(Application.class.getResource(
-                            "/com/stada/sodabilityfinder/stylesheets/global_text_styles.css")
-                    .toExternalForm()
-            );
-            scene.getStylesheets().add(Application.class.getResource(
-                            "/com/stada/sodabilityfinder/stylesheets/login_register_style.css")
-                    .toExternalForm()
-            );
-            stage.setScene(scene);
-            stage.show();
-        }
-
-        public Scene getScene() {
-            return content.getScene();
-        }
+    /**
+     * Returns the scene of the current content.
+     *
+     * @return The scene of the current content.
+     */
+    public Scene getScene() {
+        return content.getScene();
+    }
 }
