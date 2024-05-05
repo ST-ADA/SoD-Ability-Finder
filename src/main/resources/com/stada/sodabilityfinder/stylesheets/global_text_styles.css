@@ -1,0 +1,9 @@
+/* Global text styles */
+@font-face {
+    font-family: 'Morpheus';
+    src: url("../fonts/Morpheus.ttf");
+}
+
+* {
+    -fx-font-family: "Morpheus", serif;
+}
