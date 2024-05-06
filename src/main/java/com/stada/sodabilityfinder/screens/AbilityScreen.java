@@ -20,56 +20,17 @@ public class AbilityScreen {
     private BorderPane content = new BorderPane();
 
     public void start(Stage stage,String faction, String className) throws IOException {
+        // Create a new instance of the TopBar class
+        TopBar topBar = new TopBar();
 
-        content.setId("content");
-
-        // Create the top HBox
-        HBox top = new HBox();
-
-        // Create and configure the logo
-        ImageView logo = new ImageView(
-                new Image(Application.class.getResource("images/logo.png").toString())
-        );
-        logo.setFitHeight(50);
-        logo.setFitWidth(100);
-
-        // Create and configure the top label
-        Label topLabel = new Label("Ability Finder");
-        topLabel.setId("topLabel");
-
-        // Create an image using the admin_image.png file
-        Image adminImage = new Image(
-                Application.class.getResource(
-                                "images/admin_image.png")
-                        .toString());
-
-        // Create an ImageView to display the image
-        ImageView adminImageView = new ImageView(adminImage);
-        adminImageView.setFitHeight(50);
-        adminImageView.setFitWidth(62);
-
-        // Create a Hyperlink and set the graphic to the ImageView
-        Hyperlink adminLink = new Hyperlink();
-        adminLink.setGraphic(adminImageView);
-
-        // Set an action for the hyperlink
-        adminLink.setOnAction(e -> {
-            // Add your action here
-        });
-
-        // Create regions for spacing
-        Region region1 = new Region();
-        HBox.setHgrow(region1, Priority.ALWAYS);
-        Region region2 = new Region();
-        HBox.setHgrow(region2, Priority.ALWAYS);
-
-        // Add elements to the top HBox
-        top.getChildren().addAll(logo, region1, topLabel, region2, adminLink);
+        // Call the createTopBar method to create the top bar and store it in the 'top' variable
+        HBox top = topBar.createTopBar();
 
         // Create the ScrollPane
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setStyle("-fx-background:transparent;-fx-background-color:transparent;");
         scrollPane.setPrefSize(600, 400);
+        scrollPane.setFitToWidth(true);
 
 
         // Create some test data
@@ -78,31 +39,22 @@ public class AbilityScreen {
         Image abilityImage = new Image(Application.class.getResource("images/alliance.png").toString());
         String location = "Test Location";
 
-        // Create the GridPane with 1 column
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(20);
-        gridPane.setVgap(20);
-        gridPane.setAlignment(Pos.CENTER);
-        GridPane.setHgrow(gridPane, Priority.ALWAYS);
-        GridPane.setVgrow(gridPane, Priority.ALWAYS);
+        // Create the FlowPane
+        FlowPane flowPane = new FlowPane();
+        flowPane.setHgap(20);
+        flowPane.setVgap(20);
+        flowPane.setAlignment(Pos.CENTER);
 
-        // Add the ability layout to the grid pane
-        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 0);
-        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 1);
-        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 2);
-        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 3);
-        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 4);
-        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 5);
-        gridPane.add(createAbilityLayout(abilityName, abilityDescription, abilityImage, location), 0, 6);
+        // TODO add ability data to the flow pane
 
 
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().add(gridPane);
-        stackPane.setAlignment(Pos.CENTER);
+        // Create a StackPane to center the FlowPane
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().add(flowPane);
 
-        // Set the GridPane as the content of the ScrollPane
-        scrollPane.setContent(stackPane);
-
+        // Set the StackPane as the content of the ScrollPane
+        scrollPane.setContent(vBox);
 
         // Create the back button
         Button backButton = new Button("Back to Homescreen");
@@ -130,6 +82,7 @@ public class AbilityScreen {
         );
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(0);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         MediaView mediaView = new MediaView(mediaPlayer);
 
         // Add the media view to the content

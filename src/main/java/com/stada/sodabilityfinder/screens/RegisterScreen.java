@@ -90,6 +90,7 @@ public class RegisterScreen {
                         .toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(0);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         MediaView mediaView = new MediaView(mediaPlayer);
 
         // Create and configure stack pane

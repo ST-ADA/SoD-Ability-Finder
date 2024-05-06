@@ -91,9 +91,12 @@ public class LoginScreen {
         vbox.getChildren().addAll(logo, usernameLabel, spacingBoxUsername, spacingButton);
 
         // Create and configure media player
-        Media media = new Media(Application.class.getResource("images/backgrounds/background.mp4").toString());
+        Media media = new Media(Application.class.getResource(
+                "images/backgrounds/background.mp4")
+                .toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(0);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         MediaView mediaView = new MediaView(mediaPlayer);
 
         // Create and configure stack pane
