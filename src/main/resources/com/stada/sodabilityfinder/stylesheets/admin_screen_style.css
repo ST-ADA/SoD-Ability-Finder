@@ -1,0 +1,24 @@
+/* Admin Screen Style */
+
+/* Style for the register and login buttons */
+#addAbilityButton, #updateAbilityButton {
+    -fx-text-fill: #d4af37;
+    -fx-font-size: 14;
+    -fx-background-image: url('../images/button_idle.png');
+    -fx-pref-width: 236px;
+    -fx-pref-height: 35px;
+    -fx-border: none;
+    -fx-effect: dropshadow(gaussian, #000, 8, 0.5, 2, 2);
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+}
+
+/* Style for the register and login buttons when they are hovered over */
+#addAbilityButton:hover, #updateAbilityButton:hover {
+    -fx-background-image: url('../images/button_hover.png');
+}
+
+/* Style for the register and login buttons when they are pressed */
+#addAbilityButton:pressed, #updateAbilityButton:pressed {
+    -fx-background-image: url('../images/button_active.png');
+}

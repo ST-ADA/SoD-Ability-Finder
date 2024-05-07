@@ -43,7 +43,16 @@ public class TopBar {
 
         // Set an action for the hyperlink
         adminLink.setOnAction(e -> {
-            // Add your action here
+            // Create a new instance of the AdminScreen class
+            AdminScreen adminScreen = new AdminScreen();
+            try {
+                // Call the start method of the AdminScreen class
+                adminScreen.start(Application.getStage());
+                // Set the scene of the stage to the scene of the AdminScreen class
+                Application.getStage().setScene(adminScreen.getScene());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
         // Create regions for spacing
