@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -35,13 +34,13 @@ public class AdminScreen {
         Button addAbilityButton = new Button("Add Ability");
         addAbilityButton.setId("addAbilityButton");
         addAbilityButton.setOnAction(e -> {
-//            AddAbilityScreen addAbilityScreen = new AddAbilityScreen();
-//            try {
-//                addAbilityScreen.start(stage, faction, className);
-//                stage.setScene(addAbilityScreen.getScene());
-//            } catch (IOException ioException) {
-//                ioException.printStackTrace();
-//            }
+            AddAbilityScreen addAbilityScreen = new AddAbilityScreen();
+            try {
+                addAbilityScreen.start(stage);
+                stage.setScene(addAbilityScreen.getScene());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
 
         Button updateAbilityButton = new Button("Update Ability");
@@ -86,13 +85,17 @@ public class AdminScreen {
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         MediaView mediaView = new MediaView(mediaPlayer);
 
-        // Create and configure stack pane
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(mediaView, top, centerVBox, bottomHBox);
-        stackPane.setAlignment(top, Pos.TOP_CENTER);
+        // Add the media view to the content
+        content.getChildren().add(mediaView);
+
+        // Set the top HBox as the top of the content
+        content.setTop(top);
 
         // Set the stack pane as the center of the content
-        content.setCenter(stackPane);
+        content.setCenter(centerVBox);
+
+        // Set the bottom HBox as the bottom of the content
+        content.setBottom(bottomHBox);
 
         // Play the media
         mediaPlayer.play();
