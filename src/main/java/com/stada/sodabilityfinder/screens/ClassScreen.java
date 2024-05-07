@@ -80,13 +80,11 @@ public class ClassScreen {
         // Add the media view to the content
         content.getChildren().add(mediaView);
 
-        // Create and configure the stack pane
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(top, centerVBox);
-        stackPane.setAlignment(top, Pos.TOP_CENTER);
+        // Set the top HBox as the top of the content
+        content.setTop(top);
 
         // Set the stack pane as the center of the content
-        content.setCenter(stackPane);
+        content.setCenter(centerVBox);
 
         // Set the bottom HBox as the bottom of the content
         content.setBottom(bottomHBox);

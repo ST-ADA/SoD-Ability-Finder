@@ -28,7 +28,7 @@ public class AdminScreen {
         HBox top = topBar.createTopBar();
 
         // Create and configure center VBox
-        VBox centerVBox = new VBox();
+        HBox centerVBox = new HBox();
         centerVBox.setAlignment(Pos.CENTER);
         centerVBox.setSpacing(30);
 
@@ -88,14 +88,11 @@ public class AdminScreen {
 
         // Create and configure stack pane
         StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(mediaView, top, centerVBox);
+        stackPane.getChildren().addAll(mediaView, top, centerVBox, bottomHBox);
         stackPane.setAlignment(top, Pos.TOP_CENTER);
 
         // Set the stack pane as the center of the content
         content.setCenter(stackPane);
-
-        // Set the bottom HBox as the bottom of the content
-        content.setBottom(bottomHBox);
 
         // Play the media
         mediaPlayer.play();

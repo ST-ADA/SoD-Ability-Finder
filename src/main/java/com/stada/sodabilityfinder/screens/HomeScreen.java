@@ -66,13 +66,15 @@ public class HomeScreen {
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         MediaView mediaView = new MediaView(mediaPlayer);
 
-        // Create and configure stack pane
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(mediaView, top, centerVBox);
-        stackPane.setAlignment(top, Pos.TOP_CENTER);
+        // Add the media view to the content
+        content.getChildren().add(mediaView);
+
+        // Set the top HBox as the top of the content
+        content.setTop(top);
 
         // Set stack pane as center of content
-        content.setCenter(stackPane);
+        content.setCenter(centerVBox);
+
         mediaPlayer.play();
 
         // Create and configure scene
