@@ -46,13 +46,13 @@ public class AdminScreen {
         Button updateAbilityButton = new Button("Update Ability");
         updateAbilityButton.setId("updateAbilityButton");
         updateAbilityButton.setOnAction(e -> {
-//            UpdateAbilityScreen updateAbilityScreen = new UpdateAbilityScreen();
-//            try {
-//                updateAbilityScreen.start(stage, faction, className);
-//                stage.setScene(updateAbilityScreen.getScene());
-//            } catch (IOException ioException) {
-//                ioException.printStackTrace();
-//            }
+            UpdateAbilityScreen updateAbilityScreen = new UpdateAbilityScreen();
+            try {
+                updateAbilityScreen.start(stage);
+                stage.setScene(updateAbilityScreen.getScene());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
 
         centerVBox.getChildren().addAll(addAbilityButton, updateAbilityButton);
