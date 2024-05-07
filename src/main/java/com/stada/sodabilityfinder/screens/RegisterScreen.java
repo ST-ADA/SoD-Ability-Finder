@@ -1,6 +1,7 @@
 package com.stada.sodabilityfinder.screens;
 
 import com.stada.sodabilityfinder.Application;
+import com.stada.sodabilityfinder.connector.MySQLConnectionManager;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,6 +16,7 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class RegisterScreen {
     // The main content pane for this screen
@@ -62,7 +64,38 @@ public class RegisterScreen {
         // Create and configure register button
         Button register = new Button("Register");
         register.setId("register");
-        register.setOnAction(e -> {});
+
+        // Set the action to be performed when the register button is clicked
+        register.setOnAction(e -> {
+            // Create a new instance of the MySQLConnectionManager class
+            MySQLConnectionManager connectionManager = new MySQLConnectionManager();
+            try {
+                // Establish a connection to the MySQL database
+                connectionManager.establishConnection();
+
+                // Attempt to create a new user with the entered username and password
+                connectionManager.createUser(username.getText(), password.getText());
+
+                // Close the database connection after the user has been created
+                connectionManager.closeConnection();
+            } catch (SQLException ex) {
+                // If the username already exists in the database, show a warning alert
+                if (ex.getMessage().equals("Username already exists")) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Registration Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Username already exists. Please choose a different username.");
+                    alert.showAndWait();
+                } else {
+                    // If any other error occurs during the registration process, show an error alert
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("An error occurred while registering the user");
+                    alert.setContentText(ex.getMessage());
+                    alert.showAndWait();
+                }
+            }
+        });
 
         // Create and configure login hyperlink
         Hyperlink login = new Hyperlink("Back to Log In");

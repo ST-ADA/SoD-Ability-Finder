@@ -106,10 +106,6 @@ public class AdminScreen {
                 Application.class.getResource(
                                 "/com/stada/sodabilityfinder/stylesheets/global_style.css")
                         .toExternalForm());
-        scene.getStylesheets().add(
-                Application.class.getResource(
-                                "/com/stada/sodabilityfinder/stylesheets/admin_screen_style.css")
-                        .toExternalForm());
 
         // Set the scene on the stage and show the stage
         stage.setScene(scene);

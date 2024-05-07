@@ -1,6 +1,9 @@
 package com.stada.sodabilityfinder.screens;
 
 import com.stada.sodabilityfinder.Application;
+import com.stada.sodabilityfinder.objects.User;
+import com.stada.sodabilityfinder.objects.UserSession;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -43,15 +46,28 @@ public class TopBar {
 
         // Set an action for the hyperlink
         adminLink.setOnAction(e -> {
-            // Create a new instance of the AdminScreen class
-            AdminScreen adminScreen = new AdminScreen();
-            try {
-                // Call the start method of the AdminScreen class
-                adminScreen.start(Application.getStage());
-                // Set the scene of the stage to the scene of the AdminScreen class
-                Application.getStage().setScene(adminScreen.getScene());
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            // Get the current user from the UserSession
+            User currentUser = UserSession.getInstance().getUser();
+
+            // Check if the current user is an admin
+            if (currentUser != null && currentUser.isAdmin()) {
+                // Create a new instance of the AdminScreen class
+                AdminScreen adminScreen = new AdminScreen();
+                try {
+                    // Call the start method of the AdminScreen class
+                    adminScreen.start(Application.getStage());
+                    // Set the scene of the stage to the scene of the AdminScreen class
+                    Application.getStage().setScene(adminScreen.getScene());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                // If the current user is not an admin, show an alert
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Access Denied");
+                alert.setHeaderText(null);
+                alert.setContentText("Admin only!");
+                alert.showAndWait();
             }
         });
 

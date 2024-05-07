@@ -1,6 +1,9 @@
 package com.stada.sodabilityfinder.screens;
 
 import com.stada.sodabilityfinder.Application;
+import com.stada.sodabilityfinder.connector.MySQLConnectionManager;
+import com.stada.sodabilityfinder.objects.User;
+import com.stada.sodabilityfinder.objects.UserSession;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,6 +18,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class LoginScreen {
     // The main content pane for this screen
@@ -61,13 +65,43 @@ public class LoginScreen {
         // Create and configure login button
         Button login = new Button("Log in");
         login.setId("login");
+
+        // Set the action to be performed when the login button is clicked
         login.setOnAction(e -> {
-            HomeScreen homeScreen = new HomeScreen();
+            // Create a new instance of the MySQLConnectionManager class
+            MySQLConnectionManager connectionManager = new MySQLConnectionManager();
             try {
-                homeScreen.start(stage);
-                stage.setScene(homeScreen.getScene());
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+                // Establish a connection to the MySQL database
+                connectionManager.establishConnection();
+
+                // Attempt to read the user with the entered username from the database
+                User user = connectionManager.readUser(username.getText());
+
+                // If the user is null (does not exist) or the entered password does not match the user's password,
+                // show an error alert
+                if (user == null || !user.getPassword().equals(password.getText())) {
+                    // Create and configure the error alert
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Login Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Username/Password incorrect!");
+                    alert.showAndWait();
+                } else {
+                    // Get the current user session
+                    UserSession.getInstance().setUser(user);
+
+
+                    // If the entered username and password are correct, start the home screen
+                    HomeScreen homeScreen = new HomeScreen();
+                    homeScreen.start(stage);
+                    stage.setScene(homeScreen.getScene());
+                }
+
+                // Close the database connection after the user has been read
+                connectionManager.closeConnection();
+            } catch (IOException | SQLException ex) {
+                // Print the stack trace if an IOException or SQLException is thrown
+                ex.printStackTrace();
             }
         });
 

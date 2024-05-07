@@ -1,8 +1,10 @@
 package com.stada.sodabilityfinder.screens;
 
 import com.stada.sodabilityfinder.Application;
+import com.stada.sodabilityfinder.objects.UserSession;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -14,6 +16,7 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class HomeScreen {
     // The main content pane for this screen
@@ -56,6 +59,28 @@ public class HomeScreen {
         centerHBox.getChildren().addAll(allianceHyperlink, hordeHyperlink);
         centerVBox.getChildren().addAll(factionLabel, centerHBox);
 
+        // Create the back button
+        Button logoutButton = new Button("Logout");
+        logoutButton.setId("backButton");
+        logoutButton.setOnAction(e -> {
+            // Clear the UserSession
+            UserSession.getInstance().cleanUserSession();
+
+            // Navigate back to the LoginScreen
+            LoginScreen loginScreen = new LoginScreen();
+            try {
+                loginScreen.start(stage);
+                stage.setScene(loginScreen.getScene());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+
+        // Create and configure the bottom HBox
+        HBox bottomHBox = new HBox();
+        bottomHBox.setAlignment(Pos.BOTTOM_RIGHT);
+        bottomHBox.getChildren().add(logoutButton);
+
         // Create and configure media player
         Media media = new Media(
                 Application.class.getResource("images/backgrounds/background.mp4")
@@ -74,6 +99,8 @@ public class HomeScreen {
 
         // Set stack pane as center of content
         content.setCenter(centerVBox);
+
+        content.setBottom(bottomHBox);
 
         mediaPlayer.play();
 

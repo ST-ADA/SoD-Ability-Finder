@@ -1,5 +1,6 @@
 package com.stada.sodabilityfinder;
 
+import com.stada.sodabilityfinder.objects.UserSession;
 import com.stada.sodabilityfinder.screens.LoginScreen;
 import javafx.stage.Stage;
 
@@ -12,6 +13,8 @@ public class Application extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         mainStage = stage;
         LoginScreen loginScreen = new LoginScreen();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(UserSession.getInstance()::cleanUserSession));
 
         loginScreen.start(stage);
         mainStage.setTitle("Season of Discovery Ability Finder");
