@@ -1,5 +1,6 @@
 package com.stada.sodabilityfinder.connector;
 
+import com.stada.sodabilityfinder.objects.Ability;
 import com.stada.sodabilityfinder.objects.User;
 
 import java.sql.*;
@@ -124,5 +125,57 @@ public class MySQLConnectionManager {
             classes.add(resultSet.getString("name"));
         }
         return classes;
+    }
+
+    public List<String> getAbilitiesForClass(String className, String factionName) throws SQLException {
+        int classId = getClassId(className, factionName);
+        String query = "SELECT name FROM Ability WHERE class_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, classId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<String> abilities = new ArrayList<>();
+        while (resultSet.next()) {
+            abilities.add(resultSet.getString("name"));
+        }
+        return abilities;
+    }
+
+    public void deleteAbility(String name) throws SQLException {
+        String query = "DELETE FROM Ability WHERE name = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, name);
+        preparedStatement.executeUpdate();
+    }
+
+    public void updateAbility(String name, byte[] image, String description, String location, int classId) throws SQLException {
+        String query = "UPDATE Ability SET image = ?, description = ?, location = ?, class_id = ? WHERE name = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setBytes(1, image);
+        preparedStatement.setString(2, description);
+        preparedStatement.setString(3, location);
+        preparedStatement.setInt(4, classId);
+        preparedStatement.setString(5, name);
+        preparedStatement.executeUpdate();
+    }
+
+    public Ability getAbility(String name, int classId) throws SQLException {
+        String query = "SELECT * FROM Ability WHERE name = ? AND class_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, name);
+        preparedStatement.setInt(2, classId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return new Ability(
+                    resultSet.getString("name"),
+                    resultSet.getBytes("image"),
+                    resultSet.getString("description"),
+                    resultSet.getString("location"),
+                    resultSet.getInt("class_id")
+            );
+        } else {
+            return null;
+        }
     }
 }
