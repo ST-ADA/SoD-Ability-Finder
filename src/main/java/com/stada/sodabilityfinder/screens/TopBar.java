@@ -3,7 +3,6 @@ package com.stada.sodabilityfinder.screens;
 import com.stada.sodabilityfinder.Application;
 import com.stada.sodabilityfinder.objects.User;
 import com.stada.sodabilityfinder.objects.UserSession;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,8 +11,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
+/**
+ * This class creates the top bar of the application.
+ * The top bar contains the logo, the name of the application,
+ * and an admin link.
+ */
 public class TopBar {
 
+    /**
+     * This method creates the top bar of the application.
+     * The top bar contains the logo, the name of the application,
+     * and an admin link.
+     *
+     * @return The top HBox containing the logo, the name of the application,
+     * and an admin link.
+     */
     public HBox createTopBar() {
         // Create the top HBox
         HBox top = new HBox();
@@ -62,12 +74,11 @@ public class TopBar {
                     ex.printStackTrace();
                 }
             } else {
-                // If the current user is not an admin, show an alert
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Access Denied");
-                alert.setHeaderText(null);
-                alert.setContentText("Admin only!");
-                alert.showAndWait();
+                // If the current user is not an admin, show a popup screen
+                if (currentUser != null && !currentUser.isAdmin()) {
+                    PopupScreen popup = new PopupScreen("Access Denied", "Admin only!");
+                    popup.showAndWait();
+                }
             }
         });
 

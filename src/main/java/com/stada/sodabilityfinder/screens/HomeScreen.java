@@ -16,8 +16,12 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
+/**
+ * The HomeScreen class is responsible for creating the home screen of the application.
+ * The home screen allows the user to choose a faction, Alliance or Horde, and navigate to the class screen.
+ * The home screen also allows the user to log out and navigate back to the login screen.
+ */
 public class HomeScreen {
     // The main content pane for this screen
     private BorderPane content = new BorderPane();
@@ -69,9 +73,12 @@ public class HomeScreen {
             // Navigate back to the LoginScreen
             LoginScreen loginScreen = new LoginScreen();
             try {
+                // Start the login screen
                 loginScreen.start(stage);
+                // Set the scene of the stage to the login screen scene
                 stage.setScene(loginScreen.getScene());
             } catch (IOException ioException) {
+                // Print the stack trace if an IOException occurs
                 ioException.printStackTrace();
             }
         });
@@ -145,9 +152,12 @@ public class HomeScreen {
             // go to ClassScreen, passing the faction as a parameter as a string
             ClassScreen classScreen = new ClassScreen();
             try {
+                // Start the class screen with the selected faction
                 classScreen.start(stage, faction);
+                // Set the scene of the stage to the class screen scene
                 stage.setScene(classScreen.getScene());
             } catch (IOException ioException) {
+                // Print the stack trace if an IOException occurs
                 ioException.printStackTrace();
             }
         });

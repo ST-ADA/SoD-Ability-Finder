@@ -20,6 +20,11 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0.75, 2, 2); /* Add a drop shadow effect */
 }
 
+/* Style for the Popup label */
+#popupLabel {
+    -fx-text-alignment: CENTER; /* Add this line to center the text */
+}
+
 /* Style for the hyperlink */
 .hyperlink {
     -fx-border-color: transparent; /* Make the border color transparent */

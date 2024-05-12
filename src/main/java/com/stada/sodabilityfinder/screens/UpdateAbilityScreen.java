@@ -23,12 +23,23 @@ import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * This class creates the UpdateAbilityScreen.
+ */
 public class UpdateAbilityScreen {
 
+    // Create a new BorderPane for the content
     BorderPane content = new BorderPane();
 
+    // Create a new File for the image
     File file;
 
+    /**
+     * This method creates the UpdateAbilityScreen.
+     *
+     * @param stage The stage to display the screen on.
+     * @throws IOException If an I/O error occurs.
+     */
     public void start(Stage stage) throws IOException {
         // Create a new instance of the TopBar class
         TopBar topBar = new TopBar();
@@ -48,22 +59,34 @@ public class UpdateAbilityScreen {
 
         // Create a ComboBox for factions
         ComboBox<String> factionComboBox = new ComboBox<>();
+
+        // Try to establish a connection to the database
         try {
+            // Create a new instance of MySQLConnectionManager
             MySQLConnectionManager connectionManager = new MySQLConnectionManager();
+
+            // Establish a connection to the database
             connectionManager.establishConnection();
+
+            // Retrieve a list of all factions from the database
             List<String> factions = connectionManager.getAllFactions();
+
+            // Add the retrieved factions to the ComboBox
             factionComboBox.getItems().addAll(factions);
+
+            // Close the database connection
             connectionManager.closeConnection();
         } catch (SQLException ex) {
+            // Print the stack trace if a SQLException is thrown
             ex.printStackTrace();
         }
+        // Set the prompt text of the ComboBox
         factionComboBox.setPromptText("Select a Faction");
 
         // Create a ComboBox for classes
         ComboBox<String> classComboBox = new ComboBox<>();
         // Initially disable the classComboBox
         classComboBox.setDisable(true);
-
         // Add a listener to the factionComboBox
         factionComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             // Enable the classComboBox when a faction is selected
@@ -74,15 +97,26 @@ public class UpdateAbilityScreen {
 
             // Get the classes for the selected faction
             try {
+                // Create a new instance of MySQLConnectionManager
                 MySQLConnectionManager connectionManager = new MySQLConnectionManager();
+
+                // Establish a connection to the database
                 connectionManager.establishConnection();
+
+                // Retrieve a list of all classes for the selected faction from the database
                 List<String> classes = connectionManager.getClassesForFaction(newValue);
+
+                // Add the retrieved classes to the ComboBox
                 classComboBox.getItems().addAll(classes);
+
+                // Close the database connection
                 connectionManager.closeConnection();
             } catch (SQLException ex) {
+                // Print the stack trace if a SQLException is thrown
                 ex.printStackTrace();
             }
         });
+        // Set the prompt text of the ComboBox
         classComboBox.setPromptText("Select a Class");
 
         // Create a ComboBox for abilities
@@ -100,15 +134,26 @@ public class UpdateAbilityScreen {
 
             // Get the abilities for the selected class
             try {
+                // Create a new instance of MySQLConnectionManager
                 MySQLConnectionManager connectionManager = new MySQLConnectionManager();
+
+                // Establish a connection to the database
                 connectionManager.establishConnection();
+
+                // Retrieve a list of all abilities for the selected class and faction from the database
                 List<String> abilities = connectionManager.getAbilitiesForClass(newValue, factionComboBox.getValue());
+
+                // Add the retrieved abilities to the ComboBox
                 abilityComboBox.getItems().addAll(abilities);
+
+                // Close the database connection
                 connectionManager.closeConnection();
             } catch (SQLException ex) {
+                // Print the stack trace if a SQLException is thrown
                 ex.printStackTrace();
             }
         });
+        // Set the prompt text of the ComboBox
         abilityComboBox.setPromptText("Select an Ability");
 
         // Add the ComboBoxes to the HBox
@@ -138,13 +183,18 @@ public class UpdateAbilityScreen {
             }
         });
 
-        // Create and configure the update button
+        // Create a new Button for updating abilities
         Button updateButton = new Button("Update Ability");
         updateButton.setId("updateButton");
+
+        // Set the action to be performed when the button is clicked
         updateButton.setOnAction(e -> {
             try {
+                // Call the updateAbilityPopUp method with the selected faction, class, and ability
+                // This method is used to display a popup for updating the selected ability
                 updateAbilityPopUp(stage, factionComboBox.getValue(), classComboBox.getValue(), abilityComboBox.getValue());
             } catch (IOException ex) {
+                // If an IOException occurs, wrap it in a RuntimeException and throw it
                 throw new RuntimeException(ex);
             }
         });
@@ -213,8 +263,19 @@ public class UpdateAbilityScreen {
         stage.setScene(scene);
         stage.show();
     }
+
+    // Create a new Ability for the existing ability
     Ability existingAbility;
 
+    /**
+     * This method creates a popup for updating an ability.
+     *
+     * @param stage The stage to display the popup on.
+     * @param factionName The name of the faction.
+     * @param className The name of the class.
+     * @param abilityName The name of the ability.
+     * @throws IOException If an I/O error occurs.
+     */
     public void updateAbilityPopUp(Stage stage, String factionName, String className, String abilityName) throws IOException {
         try {
             // Create a new instance of the MySQLConnectionManager class
@@ -315,7 +376,7 @@ public class UpdateAbilityScreen {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-            }else {
+            } else {
                 // If no image was uploaded, use the existing image
                 image = existingAbility.getImage();
             }

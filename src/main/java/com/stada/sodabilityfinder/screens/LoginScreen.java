@@ -22,6 +22,9 @@ import javafx.scene.media.MediaView;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * The login screen of the application.
+ */
 public class LoginScreen {
     // The main content pane for this screen
     private BorderPane content = new BorderPane();
@@ -82,16 +85,11 @@ public class LoginScreen {
                 // If the user is null (does not exist) or the entered password does not match the user's password,
                 // show an error alert
                 if (user == null || !user.getPassword().equals(password.getText())) {
-                    // Create and configure the error alert
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Login Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Username/Password incorrect!");
-                    alert.showAndWait();
+                    PopupScreen popup = new PopupScreen("Error", "Invalid username or password!");
+                    popup.showAndWait();
                 } else {
                     // Get the current user session
                     UserSession.getInstance().setUser(user);
-
 
                     // If the entered username and password are correct, start the home screen
                     HomeScreen homeScreen = new HomeScreen();
@@ -107,16 +105,23 @@ public class LoginScreen {
             }
         });
 
-        // Create and configure register hyperlink
+        // Create a new Hyperlink for the register option
         Hyperlink register = new Hyperlink("Register");
+        // Set the underline property of the hyperlink to true
         register.setUnderline(true);
+        // Set the ID of the hyperlink, which can be used for CSS styling
         register.setId("hyperlink");
+        // Set the action to be performed when the hyperlink is clicked
         register.setOnAction(e -> {
+            // Create a new RegisterScreen instance
             RegisterScreen registerScreen = new RegisterScreen();
             try {
+                // Start the RegisterScreen
                 registerScreen.start(stage);
+                // Set the scene of the stage to the RegisterScreen scene
                 stage.setScene(registerScreen.getScene());
             } catch (IOException ioException) {
+                // Print the stack trace if an IOException occurs
                 ioException.printStackTrace();
             }
         });
@@ -128,7 +133,7 @@ public class LoginScreen {
 
         // Create and configure media player
         Media media = new Media(Application.class.getResource(
-                "images/backgrounds/background.mp4")
+                        "images/backgrounds/background.mp4")
                 .toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(0);
@@ -151,7 +156,7 @@ public class LoginScreen {
                         .toExternalForm());
         scene.getStylesheets().add(
                 Application.class.getResource(
-                        "/com/stada/sodabilityfinder/stylesheets/login_register_style.css")
+                                "/com/stada/sodabilityfinder/stylesheets/login_register_style.css")
                         .toExternalForm());
 
         // Add event filter for Enter key press

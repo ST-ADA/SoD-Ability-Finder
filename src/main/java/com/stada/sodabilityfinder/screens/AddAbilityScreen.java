@@ -193,6 +193,10 @@ public class AddAbilityScreen {
                 // Print the stack trace if a SQLException is thrown
                 ex.printStackTrace();
             }
+
+            // Show a popup screen to inform the user that the ability has been added
+            PopupScreen popup = new PopupScreen("Success", "Ability added successfully!");
+            popup.showAndWait();
         });
 
         // Add the nodes to the VBox

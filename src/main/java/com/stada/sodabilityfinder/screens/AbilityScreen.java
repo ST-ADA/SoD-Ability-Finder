@@ -19,12 +19,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * The AbilityScreen class is responsible for displaying the abilities of a given faction and class.
+ */
 public class AbilityScreen {
 
     // The main content pane for this screen
     private BorderPane content = new BorderPane();
 
-    public void start(Stage stage,String faction, String className) throws IOException {
+    /**
+     * Starts the ability screen.
+     *
+     * @param stage     The stage to display the screen on.
+     * @param faction   The faction of the abilities to display.
+     * @param className The class of the abilities to display.
+     * @throws IOException If an I/O exception occurs.
+     */
+    public void start(Stage stage, String faction, String className) throws IOException {
         // Create a new instance of the TopBar class
         TopBar topBar = new TopBar();
 
@@ -43,25 +54,36 @@ public class AbilityScreen {
         flowPane.setVgap(20);
         flowPane.setAlignment(Pos.CENTER);
 
-        // Create the MySQLConnectionManager
+        // Create a new MySQLConnectionManager
         MySQLConnectionManager connectionManager = new MySQLConnectionManager();
         try {
+            // Establish a connection to the database
             connectionManager.establishConnection();
+            // Retrieve a list of abilities for the given faction and class
             List<Ability> abilities = connectionManager.readAbilities(faction, className);
 
+            // Loop through each ability in the list
             for (Ability ability : abilities) {
+                // Get the image bytes of the ability
                 byte[] imageBytes = ability.getImage();
+                // Convert the image bytes to an InputStream
                 InputStream is = new ByteArrayInputStream(imageBytes);
+                // Create an Image from the InputStream
                 Image abilityImage = new Image(is);
+                // Create a layout for the ability
                 VBox abilityVBox = createAbilityLayout(ability.getName(), ability.getDescription(), abilityImage, ability.getLocation());
+                // Add the layout to the flow pane
                 flowPane.getChildren().add(abilityVBox);
             }
         } catch (Exception e) {
+            // Print the stack trace if an exception occurs
             e.printStackTrace();
         } finally {
             try {
+                // Close the connection to the database
                 connectionManager.closeConnection();
             } catch (Exception e) {
+                // Print the stack trace if an exception occurs
                 e.printStackTrace();
             }
         }
@@ -74,15 +96,21 @@ public class AbilityScreen {
         // Set the StackPane as the content of the ScrollPane
         scrollPane.setContent(vBox);
 
-        // Create the back button
+        // Create a new Button for navigating back to the home screen
         Button backButton = new Button("Back to Homescreen");
+        // Set the ID of the button, which can be used for CSS styling
         backButton.setId("backButton");
+        // Set the action to be performed when the button is clicked
         backButton.setOnAction(e -> {
+            // Create a new HomeScreen instance
             HomeScreen homeScreen = new HomeScreen();
             try {
+                // Start the home screen
                 homeScreen.start(stage);
+                // Set the scene of the stage to the home screen scene
                 stage.setScene(homeScreen.getScene());
             } catch (IOException ioException) {
+                // Print the stack trace if an IOException occurs
                 ioException.printStackTrace();
             }
         });
@@ -91,7 +119,6 @@ public class AbilityScreen {
         HBox bottomHBox = new HBox();
         bottomHBox.setAlignment(Pos.BOTTOM_RIGHT);
         bottomHBox.getChildren().add(backButton);
-
 
         // Create and configure the media player
         Media media = new Media(
@@ -134,6 +161,15 @@ public class AbilityScreen {
         stage.show();
     }
 
+    /**
+     * Creates a layout for an ability.
+     *
+     * @param abilityName        The name of the ability.
+     * @param abilityDescription The description of the ability.
+     * @param abilityImage       The image of the ability.
+     * @param location           The location of the ability.
+     * @return The VBox layout for the ability.
+     */
     private VBox createAbilityLayout(String abilityName, String abilityDescription, Image abilityImage, String location) {
         // Create the VBox named abilityVBox
         VBox abilityVBox = new VBox();

@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * The ClassScreen class is responsible for displaying the classes for the selected faction.
+ */
 public class ClassScreen {
 
     // The main content pane for this screen
@@ -27,7 +30,7 @@ public class ClassScreen {
     /**
      * Starts the ClassScreen.
      *
-     * @param stage The stage on which the ClassScreen is displayed.
+     * @param stage   The stage on which the ClassScreen is displayed.
      * @param faction The faction selected by the user.
      * @throws IOException If the FXML file for the ClassScreen cannot be found.
      */
@@ -49,15 +52,21 @@ public class ClassScreen {
         // Create the class grid
         GridPane classGrid = createClassGrid(stage, faction);
 
-        // Create the back button
+        // Create a new Button for navigating back to the home screen
         Button backButton = new Button("Back to Homescreen");
+        // Set the ID of the button, which can be used for CSS styling
         backButton.setId("backButton");
+        // Set the action to be performed when the button is clicked
         backButton.setOnAction(e -> {
+            // Create a new HomeScreen instance
             HomeScreen homeScreen = new HomeScreen();
             try {
+                // Start the home screen
                 homeScreen.start(stage);
+                // Set the scene of the stage to the home screen scene
                 stage.setScene(homeScreen.getScene());
             } catch (IOException ioException) {
+                // Print the stack trace if an IOException occurs
                 ioException.printStackTrace();
             }
         });
@@ -114,7 +123,7 @@ public class ClassScreen {
     /**
      * Creates a grid of classes for the selected faction.
      *
-     * @param stage The stage on which the ClassScreen is displayed.
+     * @param stage   The stage on which the ClassScreen is displayed.
      * @param faction The faction selected by the user.
      * @return The grid of classes for the selected faction.
      */
@@ -127,7 +136,6 @@ public class ClassScreen {
 
         // Create a new instance of the MySQLConnectionManager class
         MySQLConnectionManager connectionManager = new MySQLConnectionManager();
-
         try {
             // Establish a connection to the MySQL database
             connectionManager.establishConnection();

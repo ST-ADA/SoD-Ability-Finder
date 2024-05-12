@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -14,11 +13,21 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The AdminScreen class is a screen
+ * that allows the user to add or update abilities.
+ */
 public class AdminScreen {
 
     // The main content pane for this screen
     private BorderPane content = new BorderPane();
 
+    /**
+     * Starts the AdminScreen.
+     *
+     * @param stage The stage to display the screen on.
+     * @throws IOException If the screen cannot be displayed.
+     */
     public void start(Stage stage) throws IOException {
         // Create a new instance of the TopBar class
         TopBar topBar = new TopBar();
@@ -31,41 +40,62 @@ public class AdminScreen {
         centerVBox.setAlignment(Pos.CENTER);
         centerVBox.setSpacing(30);
 
+        // Create a new Button for adding abilities
         Button addAbilityButton = new Button("Add Ability");
+        // Set the ID of the button, which can be used for CSS styling
         addAbilityButton.setId("addAbilityButton");
+        // Set the action to be performed when the button is clicked
         addAbilityButton.setOnAction(e -> {
+            // Create a new AddAbilityScreen instance
             AddAbilityScreen addAbilityScreen = new AddAbilityScreen();
             try {
+                // Start the AddAbilityScreen
                 addAbilityScreen.start(stage);
+                // Set the scene of the stage to the AddAbilityScreen scene
                 stage.setScene(addAbilityScreen.getScene());
             } catch (IOException ioException) {
+                // Print the stack trace if an IOException occurs
                 ioException.printStackTrace();
             }
         });
 
+        // Create a new Button for updating abilities
         Button updateAbilityButton = new Button("Update Ability");
+        // Set the ID of the button, which can be used for CSS styling
         updateAbilityButton.setId("updateAbilityButton");
+        // Set the action to be performed when the button is clicked
         updateAbilityButton.setOnAction(e -> {
+            // Create a new UpdateAbilityScreen instance
             UpdateAbilityScreen updateAbilityScreen = new UpdateAbilityScreen();
             try {
+                // Start the UpdateAbilityScreen
                 updateAbilityScreen.start(stage);
+                // Set the scene of the stage to the UpdateAbilityScreen scene
                 stage.setScene(updateAbilityScreen.getScene());
             } catch (IOException ioException) {
+                // Print the stack trace if an IOException occurs
                 ioException.printStackTrace();
             }
         });
 
+        // Add the addAbilityButton and updateAbilityButton to the center VBox
         centerVBox.getChildren().addAll(addAbilityButton, updateAbilityButton);
 
-        // Create the back button
+        // Create a new Button for navigating back to the home screen
         Button backButton = new Button("Back to Homescreen");
+// Set the ID of the button, which can be used for CSS styling
         backButton.setId("backButton");
+// Set the action to be performed when the button is clicked
         backButton.setOnAction(e -> {
+            // Create a new HomeScreen instance
             HomeScreen homeScreen = new HomeScreen();
             try {
+                // Start the home screen
                 homeScreen.start(stage);
+                // Set the scene of the stage to the home screen scene
                 stage.setScene(homeScreen.getScene());
             } catch (IOException ioException) {
+                // Print the stack trace if an IOException occurs
                 ioException.printStackTrace();
             }
         });

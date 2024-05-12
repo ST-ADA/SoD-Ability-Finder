@@ -20,6 +20,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * The RegisterScreen class is responsible for displaying the register screen of the application.
+ */
 public class RegisterScreen {
     // The main content pane for this screen
     private BorderPane content = new BorderPane();
@@ -83,32 +86,34 @@ public class RegisterScreen {
             } catch (SQLException ex) {
                 // If the username already exists in the database, show a warning alert
                 if (ex.getMessage().equals("Username already exists")) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Registration Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Username already exists. Please choose a different username.");
-                    alert.showAndWait();
+                    // If the username already exists in the database, show a warning alert
+                    PopupScreen popup = new PopupScreen("Warning", "Username already exists!");
+                    popup.showAndWait();
                 } else {
                     // If any other error occurs during the registration process, show an error alert
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("An error occurred while registering the user");
-                    alert.setContentText(ex.getMessage());
-                    alert.showAndWait();
+                    PopupScreen popup = new PopupScreen("Error", "An error occurred!");
+                    popup.showAndWait();
                 }
             }
         });
 
-        // Create and configure login hyperlink
+        // Create a new Hyperlink for the login option
         Hyperlink login = new Hyperlink("Back to Log In");
+        // Set the underline property of the hyperlink to true
         login.setUnderline(true);
+        // Set the ID of the hyperlink, which can be used for CSS styling
         login.setId("hyperlink");
+        // Set the action to be performed when the hyperlink is clicked
         login.setOnAction(e -> {
+            // Create a new LoginScreen instance
             LoginScreen loginScreen = new LoginScreen();
             try {
+                // Start the LoginScreen
                 loginScreen.start(stage);
+                // Set the scene of the stage to the LoginScreen scene
                 stage.setScene(loginScreen.getScene());
             } catch (IOException ioException) {
+                // Print the stack trace if an IOException occurs
                 ioException.printStackTrace();
             }
         });
