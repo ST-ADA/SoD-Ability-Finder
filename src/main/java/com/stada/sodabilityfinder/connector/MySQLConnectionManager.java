@@ -3,6 +3,8 @@ package com.stada.sodabilityfinder.connector;
 import com.stada.sodabilityfinder.objects.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MySQLConnectionManager {
@@ -59,5 +61,68 @@ public class MySQLConnectionManager {
         preparedStatement.setString(2, password);
         preparedStatement.setBoolean(3, false);
         preparedStatement.executeUpdate();
+    }
+
+    public void addAbility(String name, byte[] image, String description, String location, int classId) throws SQLException {
+        String query = "INSERT INTO Ability (name, image, description, location, class_id) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, name);
+        preparedStatement.setBytes(2, image);
+        preparedStatement.setString(3, description);
+        preparedStatement.setString(4, location);
+        preparedStatement.setInt(5, classId);
+        preparedStatement.executeUpdate();
+    }
+
+    public String getFaction(int classId) throws SQLException {
+        String query = "SELECT Faction.name FROM Faction JOIN Class ON Faction.faction_id = Class.faction_id WHERE Class.class_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, classId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getString("name");
+        } else {
+            return null;
+        }
+    }
+
+    public List<String> getAllFactions() throws SQLException {
+        String query = "SELECT name FROM Faction";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<String> factions = new ArrayList<>();
+        while (resultSet.next()) {
+            factions.add(resultSet.getString("name"));
+        }
+        return factions;
+    }
+
+    public int getClassId(String className, String factionName) throws SQLException {
+        String query = "SELECT Class.class_id FROM Class JOIN Faction ON Class.faction_id = Faction.faction_id WHERE Class.name = ? AND Faction.name = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, className);
+        preparedStatement.setString(2, factionName);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getInt("class_id");
+        } else {
+            return -1;
+        }
+    }
+
+    public List<String> getClassesForFaction(String factionName) throws SQLException {
+        String query = "SELECT Class.name FROM Class JOIN Faction ON Class.faction_id = Faction.faction_id WHERE Faction.name = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, factionName);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<String> classes = new ArrayList<>();
+        while (resultSet.next()) {
+            classes.add(resultSet.getString("name"));
+        }
+        return classes;
     }
 }

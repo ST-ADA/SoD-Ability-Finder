@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -144,6 +146,13 @@ public class RegisterScreen {
                 Application.class.getResource(
                         "/com/stada/sodabilityfinder/stylesheets/login_register_style.css")
                         .toExternalForm());
+
+        // Add event filter for Enter key press
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                register.fire();
+            }
+        });
         stage.setScene(scene);
         stage.show();
     }

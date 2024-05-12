@@ -1,10 +1,12 @@
 package com.stada.sodabilityfinder.screens;
 
 import com.stada.sodabilityfinder.Application;
+import com.stada.sodabilityfinder.connector.MySQLConnectionManager;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -18,11 +20,22 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.SQLException;
+import java.util.List;
 
 public class AddAbilityScreen {
     // The main content pane for this screen
     private BorderPane content = new BorderPane();
 
+    // The selected file from the FileChooser
+    private File file;
+
+    /**
+     * Starts the AddAbilityScreen.
+     *
+     * @param stage The stage to display the screen on.
+     * @throws IOException If an I/O error occurs.
+     */
     public void start(Stage stage) throws IOException {
         // Create a new instance of the TopBar class
         TopBar topBar = new TopBar();
@@ -42,13 +55,41 @@ public class AddAbilityScreen {
 
         // Create a ComboBox for factions
         ComboBox<String> factionComboBox = new ComboBox<>();
-        factionComboBox.getItems().addAll("Alliance", "Horde");
+        try {
+            MySQLConnectionManager connectionManager = new MySQLConnectionManager();
+            connectionManager.establishConnection();
+            List<String> factions = connectionManager.getAllFactions();
+            factionComboBox.getItems().addAll(factions);
+            connectionManager.closeConnection();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
         factionComboBox.setPromptText("Select a Faction");
 
         // Create a ComboBox for classes
         ComboBox<String> classComboBox = new ComboBox<>();
-        classComboBox.getItems().addAll("druid", "hunter", "mage", "priest",
-                "rogue", "warlock", "warrior", "paladin", "shaman");
+        // Initially disable the classComboBox
+        classComboBox.setDisable(true);
+
+        // Add a listener to the factionComboBox
+        factionComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+            // Enable the classComboBox when a faction is selected
+            classComboBox.setDisable(false);
+
+            // Clear the previous items in the classComboBox
+            classComboBox.getItems().clear();
+
+            // Get the classes for the selected faction
+            try {
+                MySQLConnectionManager connectionManager = new MySQLConnectionManager();
+                connectionManager.establishConnection();
+                List<String> classes = connectionManager.getClassesForFaction(newValue);
+                classComboBox.getItems().addAll(classes);
+                connectionManager.closeConnection();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
         classComboBox.setPromptText("Select a Class");
 
         // Add the ComboBoxes to the HBox
@@ -84,8 +125,7 @@ public class AddAbilityScreen {
         // Set an action for the uploadButton
         uploadButton.setOnAction(e -> {
             // Show the FileChooser dialog and get the selected file
-            File file = fileChooser.showOpenDialog(stage);
-
+            file = fileChooser.showOpenDialog(stage);
             // Check if a file was selected
             if (file != null) {
                 try {
@@ -98,28 +138,66 @@ public class AddAbilityScreen {
         });
 
         // Create a TextField for the ability description
-        TextField abilityDescriptionField = new TextField();
-        abilityDescriptionField.setId("abilityDescriptionField");
-        abilityDescriptionField.setPromptText("Ability Description");
-        abilityDescriptionField.setAlignment(Pos.TOP_LEFT);
+        TextArea abilityDescriptionArea = new TextArea();
+        abilityDescriptionArea.setId("abilityDescriptionArea");
+        abilityDescriptionArea.setPromptText("Ability Description");
+        abilityDescriptionArea.setWrapText(true);
+        abilityDescriptionArea.setEditable(true);
 
         // Create a TextArea for the location
-        TextField locationField = new TextField();
-        locationField.setId("abilityLocationField");
-        locationField.setPromptText("Location");
-        locationField.setAlignment(Pos.TOP_LEFT);
+        TextArea locationArea = new TextArea();
+        locationArea.setId("abilityLocationArea");
+        locationArea.setPromptText("Location");
+        locationArea.setWrapText(true);
+        locationArea.setEditable(true);
 
         // Create a Button for adding the ability to the database
         Button addAbilityButton = new Button("Add Ability");
         addAbilityButton.setId("addAbilityButton");
 
         addAbilityButton.setOnAction(e -> {
-            // Add ability to the database
+            // Get the selected faction and class
+            String selectedFaction = factionComboBox.getValue();
+            String selectedClass = classComboBox.getValue();
+
+            // Get the ability name, description, and location from the input fields
+            String abilityName = abilityNameField.getText();
+            String abilityDescription = abilityDescriptionArea.getText();
+            String location = locationArea.getText();
+
+            // Convert the image file to a byte array
+            byte[] image = null;
+            if (file != null) {
+                try {
+                    image = Files.readAllBytes(file.toPath());
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+
+            // Create a new instance of the MySQLConnectionManager class
+            MySQLConnectionManager connectionManager = new MySQLConnectionManager();
+            try {
+                // Establish a connection to the MySQL database
+                connectionManager.establishConnection();
+
+                // Get the classId for the selected class and faction
+                int classId = connectionManager.getClassId(selectedClass, selectedFaction);
+
+                // Add the ability to the database
+                connectionManager.addAbility(abilityName, image, abilityDescription, location, classId);
+
+                // Close the database connection after the ability has been added
+                connectionManager.closeConnection();
+            } catch (SQLException ex) {
+                // Print the stack trace if a SQLException is thrown
+                ex.printStackTrace();
+            }
         });
 
         // Add the nodes to the VBox
-        addAbilityVBox.getChildren().addAll(abilityNameField, uploadButton, abilityDescriptionField,
-                locationField, addAbilityButton);
+        addAbilityVBox.getChildren().addAll(abilityNameField, uploadButton, abilityDescriptionArea,
+                locationArea, addAbilityButton);
 
         // Add the HBox and VBox to the center VBox
         centerVBox.getChildren().addAll(comboHBox, addAbilityVBox);
