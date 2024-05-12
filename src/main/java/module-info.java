@@ -7,4 +7,7 @@ module com.stada.sodabilityfinder {
 
     opens com.stada.sodabilityfinder to javafx.fxml;
     exports com.stada.sodabilityfinder;
+    exports com.stada.sodabilityfinder.objects;
+    exports com.stada.sodabilityfinder.connector;
+    exports com.stada.sodabilityfinder.screens;
 }

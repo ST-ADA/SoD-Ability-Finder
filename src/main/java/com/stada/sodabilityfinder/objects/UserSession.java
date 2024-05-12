@@ -22,7 +22,7 @@ public class UserSession {
     // Method to get the singleton instance of UserSession
     public static UserSession getInstance() {
         // If the instance is null, create a new UserSession
-        if (instance == null) {
+        if (instance == null || instance.isEmpty()) {
             instance = new UserSession();
         }
         // Return the singleton instance
@@ -32,6 +32,11 @@ public class UserSession {
     // Method to get the user associated with the current session
     public User getUser() {
         return user;
+    }
+
+    // Method to check if the current session is empty
+    public boolean isEmpty() {
+        return user == null;
     }
 
     // Method to clean the current user session
