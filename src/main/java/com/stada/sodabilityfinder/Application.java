@@ -2,6 +2,7 @@ package com.stada.sodabilityfinder;
 
 import com.stada.sodabilityfinder.objects.UserSession;
 import com.stada.sodabilityfinder.screens.LoginScreen;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         mainStage = stage;
+        Font.loadFont(getClass().getResource("/com/stada/sodabilityfinder/fonts/Morpheus.ttf").toExternalForm(), 12);
         LoginScreen loginScreen = new LoginScreen();
 
         Runtime.getRuntime().addShutdownHook(new Thread(UserSession.getInstance()::cleanUserSession));

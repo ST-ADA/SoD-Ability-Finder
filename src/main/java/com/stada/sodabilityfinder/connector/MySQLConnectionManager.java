@@ -306,4 +306,23 @@ public class MySQLConnectionManager {
             return null;
         }
     }
+
+    // Method to check if an ability exists in the database
+    public boolean abilityExists(String abilityName, String className, String factionName) throws SQLException {
+        // SQL query to check if an ability exists in the database
+        String query = "SELECT COUNT(*) FROM Ability WHERE name = ? AND class_id = (SELECT class_id FROM Class WHERE name = ? AND faction_id = (SELECT faction_id FROM Faction WHERE name = ?))";
+        // Prepare the SQL statement
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        // Set the parameters in the SQL statement
+        preparedStatement.setString(1, abilityName);
+        preparedStatement.setString(2, className);
+        preparedStatement.setString(3, factionName);
+        // Execute the SQL statement and get the result
+        ResultSet resultSet = preparedStatement.executeQuery();
+        // Get the count of rows returned by the query
+        resultSet.next();
+        int count = resultSet.getInt(1);
+        // Return true if the count is greater than 0, indicating that the ability exists
+        return count > 0;
+    }
 }

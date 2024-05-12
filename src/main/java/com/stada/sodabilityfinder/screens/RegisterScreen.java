@@ -95,6 +95,9 @@ public class RegisterScreen {
                     popup.showAndWait();
                 }
             }
+            // If the user was created successfully, show a success alert
+            PopupScreen popup = new PopupScreen("Success", "User created successfully!");
+            popup.showAndWait();
         });
 
         // Create a new Hyperlink for the login option

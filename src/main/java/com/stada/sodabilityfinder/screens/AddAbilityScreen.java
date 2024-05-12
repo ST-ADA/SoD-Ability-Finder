@@ -165,38 +165,47 @@ public class AddAbilityScreen {
             String abilityDescription = abilityDescriptionArea.getText();
             String location = locationArea.getText();
 
-            // Convert the image file to a byte array
-            byte[] image = null;
-            if (file != null) {
+            // Check if all fields are filled and a class and faction are selected
+            if (abilityName.isEmpty() || abilityDescription.isEmpty() || location.isEmpty() || selectedFaction == null || selectedClass == null) {
+                // Show a popup screen to inform the user that all fields must be filled and a class and faction must be selected
+                PopupScreen popup = new PopupScreen("Warning", "All fields must be filled and a class and faction must be selected!");
+                popup.showAndWait();
+            } else {
+                // Convert the image file to a byte array
+                byte[] image = null;
+                if (file != null) {
+                    try {
+                        image = Files.readAllBytes(file.toPath());
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
+                // Create a new instance of the MySQLConnectionManager class
+                MySQLConnectionManager connectionManager = new MySQLConnectionManager();
                 try {
-                    image = Files.readAllBytes(file.toPath());
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                    // Establish a connection to the MySQL database
+                    connectionManager.establishConnection();
+                    // Check if the ability already exists for the selected class and faction
+                    if (connectionManager.abilityExists(abilityName, selectedClass, selectedFaction)) {
+                        // Show a popup screen to inform the user that the ability already exists
+                        PopupScreen popup = new PopupScreen("Warning", "Ability already exists for this class and faction!");
+                        popup.showAndWait();
+                    } else {
+                        // Get the classId for the selected class and faction
+                        int classId = connectionManager.getClassId(selectedClass, selectedFaction);
+                        // Add the ability to the database
+                        connectionManager.addAbility(abilityName, image, abilityDescription, location, classId);
+                        // Show a popup screen to inform the user that the ability has been added
+                        PopupScreen popup = new PopupScreen("Success", "Ability added successfully!");
+                        popup.showAndWait();
+                    }
+                    // Close the database connection after the ability has been added
+                    connectionManager.closeConnection();
+                } catch (SQLException ex) {
+                    // Print the stack trace if a SQLException is thrown
+                    ex.printStackTrace();
                 }
             }
-
-            // Create a new instance of the MySQLConnectionManager class
-            MySQLConnectionManager connectionManager = new MySQLConnectionManager();
-            try {
-                // Establish a connection to the MySQL database
-                connectionManager.establishConnection();
-
-                // Get the classId for the selected class and faction
-                int classId = connectionManager.getClassId(selectedClass, selectedFaction);
-
-                // Add the ability to the database
-                connectionManager.addAbility(abilityName, image, abilityDescription, location, classId);
-
-                // Close the database connection after the ability has been added
-                connectionManager.closeConnection();
-            } catch (SQLException ex) {
-                // Print the stack trace if a SQLException is thrown
-                ex.printStackTrace();
-            }
-
-            // Show a popup screen to inform the user that the ability has been added
-            PopupScreen popup = new PopupScreen("Success", "Ability added successfully!");
-            popup.showAndWait();
         });
 
         // Add the nodes to the VBox
