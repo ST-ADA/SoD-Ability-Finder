@@ -1,6 +1,7 @@
 package com.stada.sodabilityfinder.screens;
 
 import com.stada.sodabilityfinder.Application;
+import com.stada.sodabilityfinder.connector.MySQLConnectionManager;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,6 +16,8 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public class ClassScreen {
 
@@ -109,10 +112,11 @@ public class ClassScreen {
     }
 
     /**
-     * Creates and configures the class grid.
+     * Creates a grid of classes for the selected faction.
      *
+     * @param stage The stage on which the ClassScreen is displayed.
      * @param faction The faction selected by the user.
-     * @return The created class grid.
+     * @return The grid of classes for the selected faction.
      */
     private GridPane createClassGrid(Stage stage, String faction) {
         // Create a new GridPane and set its properties
@@ -121,16 +125,19 @@ public class ClassScreen {
         grid.setHgap(10);
         grid.setVgap(10);
 
-        // Create a new GridPane and set its properties
-        String[][] classes = {
-                {"druid", "hunter", "mage", "priest"},
-                {"rogue", "warlock", "warrior", faction.equals("alliance") ? "paladin" : "shaman"}
-        };
+        // Create a new instance of the MySQLConnectionManager class
+        MySQLConnectionManager connectionManager = new MySQLConnectionManager();
 
-        // Loop through each class and create a hyperlink for it
-        for (int i = 0; i < classes.length; i++) {
-            for (int j = 0; j < classes[i].length; j++) {
-                String className = classes[i][j];
+        try {
+            // Establish a connection to the MySQL database
+            connectionManager.establishConnection();
+
+            // Get the classes for the selected faction
+            List<String> classes = connectionManager.getClassesForFaction(faction);
+
+            // Loop through each class and create a hyperlink for it
+            for (int i = 0; i < classes.size(); i++) {
+                String className = classes.get(i);
                 // Check if the class name is not empty
                 if (!className.isEmpty()) {
                     // Create an image for the class
@@ -158,8 +165,19 @@ public class ClassScreen {
                     });
 
                     // Add the hyperlink to the grid
-                    grid.add(classHyperlink, j, i);
+                    grid.add(classHyperlink, i % 4, i / 4);
                 }
+            }
+        } catch (SQLException ex) {
+            // Print the stack trace if a SQLException is thrown
+            ex.printStackTrace();
+        } finally {
+            try {
+                // Close the database connection after the classes have been retrieved
+                connectionManager.closeConnection();
+            } catch (SQLException ex) {
+                // Print the stack trace if a SQLException is thrown
+                ex.printStackTrace();
             }
         }
         // Return the created grid

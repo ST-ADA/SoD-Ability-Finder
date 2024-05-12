@@ -141,6 +141,26 @@ public class MySQLConnectionManager {
         return abilities;
     }
 
+    public List<Ability> readAbilities(String faction, String className) throws SQLException {
+        int classId = getClassId(className, faction);
+        String query = "SELECT * FROM Ability WHERE class_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, classId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<Ability> abilities = new ArrayList<>();
+        while (resultSet.next()) {
+            abilities.add(new Ability(
+                    resultSet.getString("name"),
+                    resultSet.getBytes("image"),
+                    resultSet.getString("description"),
+                    resultSet.getString("location"),
+                    resultSet.getInt("class_id")
+            ));
+        }
+        return abilities;
+    }
+
     public void deleteAbility(String name) throws SQLException {
         String query = "DELETE FROM Ability WHERE name = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);

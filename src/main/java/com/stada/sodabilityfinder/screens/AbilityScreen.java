@@ -1,6 +1,8 @@
 package com.stada.sodabilityfinder.screens;
 
 import com.stada.sodabilityfinder.Application;
+import com.stada.sodabilityfinder.connector.MySQLConnectionManager;
+import com.stada.sodabilityfinder.objects.Ability;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,7 +14,10 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 public class AbilityScreen {
 
@@ -32,21 +37,34 @@ public class AbilityScreen {
         scrollPane.setPrefSize(600, 400);
         scrollPane.setFitToWidth(true);
 
-
-        // Create some test data
-        String abilityName = "Test Ability";
-        String abilityDescription = "This is a test ability.";
-        Image abilityImage = new Image(Application.class.getResource("images/alliance.png").toString());
-        String location = "Test Location";
-
         // Create the FlowPane
         FlowPane flowPane = new FlowPane();
         flowPane.setHgap(20);
         flowPane.setVgap(20);
         flowPane.setAlignment(Pos.CENTER);
 
-        // TODO add ability data to the flow pane
+        // Create the MySQLConnectionManager
+        MySQLConnectionManager connectionManager = new MySQLConnectionManager();
+        try {
+            connectionManager.establishConnection();
+            List<Ability> abilities = connectionManager.readAbilities(faction, className);
 
+            for (Ability ability : abilities) {
+                byte[] imageBytes = ability.getImage();
+                InputStream is = new ByteArrayInputStream(imageBytes);
+                Image abilityImage = new Image(is);
+                VBox abilityVBox = createAbilityLayout(ability.getName(), ability.getDescription(), abilityImage, ability.getLocation());
+                flowPane.getChildren().add(abilityVBox);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connectionManager.closeConnection();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         // Create a StackPane to center the FlowPane
         VBox vBox = new VBox();
@@ -139,11 +157,13 @@ public class AbilityScreen {
         abilityNameText.setMaxSize(500, 30);
         abilityNameText.setMinSize(500, 30);
         abilityNameText.setEditable(false);
+        abilityNameText.setWrapText(true);
 
         // Create the TextArea named abilityDescriptionText
         TextArea abilityDescriptionText = new TextArea(abilityDescription);
         abilityDescriptionText.setPrefSize(500, 70);
         abilityDescriptionText.setEditable(false);
+        abilityDescriptionText.setWrapText(true);
 
         // Add the TextAreas to the abilityNameVBox
         abilityNameVBox.getChildren().addAll(abilityNameText, abilityDescriptionText);
@@ -155,6 +175,7 @@ public class AbilityScreen {
         TextArea locationText = new TextArea(location);
         locationText.setPrefSize(600, 100);
         locationText.setEditable(false);
+        locationText.setWrapText(true);
 
         // Add the HBox and TextArea to the abilityVBox
         abilityVBox.getChildren().addAll(topHalfHBox, locationText);
