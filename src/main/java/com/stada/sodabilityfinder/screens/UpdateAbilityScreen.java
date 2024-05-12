@@ -291,16 +291,6 @@ public class UpdateAbilityScreen {
                     new FileChooser.ExtensionFilter("PNG", "*.png")
             );
             file = fileChooser.showOpenDialog(stage.getScene().getWindow());
-
-            // Check if a file was selected
-            if (file != null) {
-                try {
-                    // Convert the File to a byte[]
-                    byte[] fileContent = Files.readAllBytes(file.toPath());
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            }
         });
 
         // Create a Button for adding the ability to the database
