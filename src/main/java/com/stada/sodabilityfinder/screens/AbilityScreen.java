@@ -9,9 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
@@ -120,18 +117,16 @@ public class AbilityScreen {
         bottomHBox.setAlignment(Pos.BOTTOM_RIGHT);
         bottomHBox.getChildren().add(backButton);
 
-        // Create and configure the media player
-        Media media = new Media(
-                Application.class.getResource("images/backgrounds/background.mp4")
-                        .toString()
-        );
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(0);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        MediaView mediaView = new MediaView(mediaPlayer);
+        // Load image
+        Image image = new Image(Application.class.getResource("images/backgrounds/background.png").toExternalForm());
 
-        // Add the media view to the content
-        content.getChildren().add(mediaView);
+        // Create ImageView
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(800);
+        imageView.setFitHeight(600);
+
+        // Add the ImageView to the content
+        content.getChildren().add(imageView);
 
         // Set the top HBox as the top of the content
         content.setTop(top);
@@ -141,9 +136,6 @@ public class AbilityScreen {
 
         // Set the bottom HBox as the bottom of the content
         content.setBottom(bottomHBox);
-
-        // Play the media
-        mediaPlayer.play();
 
         // Create and configure the scene
         Scene scene = new Scene(content, 800, 600);

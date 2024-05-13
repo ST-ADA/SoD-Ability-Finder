@@ -12,9 +12,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -126,23 +123,19 @@ public class RegisterScreen {
         spacingButton.getChildren().addAll(password, register, login);
         vbox.getChildren().addAll(logo, usernameLabel, spacingBoxUsername, spacingButton);
 
-        // Create and configure media player
-        Media media = new Media(
-                Application.class.getResource(
-                        "images/backgrounds/background.mp4")
-                        .toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(0);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        MediaView mediaView = new MediaView(mediaPlayer);
+        // Load image
+        Image image = new Image(Application.class.getResource("images/backgrounds/background.png").toExternalForm());
 
-        // Create and configure stack pane
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(mediaView, vbox);
+        // Create ImageView
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(800);
+        imageView.setFitHeight(600);
+
+        // Add the media view to the content
+        content.getChildren().add(imageView);
 
         // Set stack pane as center of content
-        content.setCenter(stackPane);
-        mediaPlayer.play();
+        content.setCenter(vbox);
 
         // Create and configure scene
         Scene scene = new Scene(content, 800, 600);

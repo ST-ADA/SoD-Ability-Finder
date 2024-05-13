@@ -19,7 +19,7 @@
 }
 
 /* Style for the text area */
-#abilityDescriptionField, #abilityLocationField {
+#abilityDescriptionArea, #abilityLocationArea {
     -fx-max-height: 150;
     -fx-max-width: 600;
     -fx-min-height: 150;
@@ -32,6 +32,6 @@
     -fx-border-width: 2;
     -fx-padding: 10;
     -fx-font-size: 14;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0.5, 2, 2);
 }
