@@ -1,0 +1,9 @@
+/* Class Screen Style */
+
+/* Style for the class screen */
+#classLabel {
+    -fx-font-size: 32; /* Set the font size to 32 */
+    -fx-font-weight: bold; /* Set the font weight to bold */
+    -fx-text-fill: #d4af37; /* Set the text color to a gold color */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0.75, 2, 2);
+}

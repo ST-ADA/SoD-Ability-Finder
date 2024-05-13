@@ -1,0 +1,8 @@
+/* Ability Screen Style */
+
+/* Ability Screen */
+.text-area {
+    -fx-background-color: #000000;
+    -fx-opacity: 0.5;
+    -fx-font-size: 12;
+}

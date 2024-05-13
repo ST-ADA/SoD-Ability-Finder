@@ -1,0 +1,37 @@
+/* Login Register Style */
+
+/* Style for the login pane */
+#username {
+    -fx-max-height: 45;
+    -fx-max-width: 180;
+    -fx-min-height: 45;
+    -fx-min-width: 180;
+    -fx-background-color: #000000;
+    -fx-opacity: 0.5;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: silver;
+    -fx-border-width: 2;
+    -fx-padding: 10;
+    -fx-font-size: 20;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0.5, 2, 2);
+}
+
+/* Style for the password field */
+#password {
+    -fx-max-height: 45;
+    -fx-max-width: 180;
+    -fx-min-height: 45;
+    -fx-min-width: 180;
+    -fx-background-color: #000000;
+    -fx-opacity: 0.5;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: silver;
+    -fx-border-width: 2;
+    -fx-padding: 10;
+    -fx-font-size: 10;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0.5, 2, 2);
+}

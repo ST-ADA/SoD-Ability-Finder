@@ -1,0 +1,15 @@
+/* HomeScreen Style */
+
+/* Style for the faction label */
+#factionLabel {
+    -fx-font-size: 32;
+    -fx-font-weight: bold;
+    -fx-text-fill: #d4af37;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0.75, 2, 2);
+}
+
+/* Style for the alliance and horde buttons */
+#allianceHyperlink, #hordeHyperlink {
+    -fx-background-radius: 60;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 1, 0, 0);
+}
